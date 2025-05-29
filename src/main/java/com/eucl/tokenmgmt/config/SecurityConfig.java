@@ -34,7 +34,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable) // Disable CSRF
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/users/register", "/api/users/login", "/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
+                        .requestMatchers("/api/users/register", "/api/users/login", "/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html","/actuator/health").permitAll()
                         .requestMatchers("/api/meters/**").hasRole("ADMIN")
                         .requestMatchers("/api/tokens/**").hasAnyRole("CUSTOMER", "ADMIN")
                         .anyRequest().authenticated()
