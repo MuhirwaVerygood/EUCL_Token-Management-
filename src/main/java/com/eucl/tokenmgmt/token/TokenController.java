@@ -36,7 +36,19 @@ public class TokenController {
         }
     )
     @PostMapping("/purchase")
-    public ResponseEntity<?> purchaseToken(@Valid @RequestBody TokenPurchaseDTO tokenPurchaseDTO) {
+    public ResponseEntity<?> purchaseToken(
+            @Valid @RequestBody TokenPurchaseDTO tokenPurchaseDTO,
+            @AuthenticationPrincipal UserDetails userDetails) {
+
+        // Check if user is a customer
+        Optional<User> requestingUser = userService.findByEmail(userDetails.getUsername());
+        boolean isCustomer = requestingUser.isPresent() && 
+                          requestingUser.get().getRole() == Role.ROLE_CUSTOMER;
+
+        if (!isCustomer) {
+            return new ResponseEntity<>("Only customers can purchase tokens", HttpStatus.FORBIDDEN);
+        }
+
         return tokenService.purchaseToken(tokenPurchaseDTO.getMeterNumber(), tokenPurchaseDTO.getAmount());
     }
 

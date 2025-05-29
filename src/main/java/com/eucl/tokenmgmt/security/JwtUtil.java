@@ -7,7 +7,9 @@ import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.security.Key;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 @Component
 public class JwtUtil {
@@ -20,6 +22,9 @@ public class JwtUtil {
                 .subject(userDetails.getUsername())
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + accessTokenExpirationMs))
+                .claim("authorities", userDetails.getAuthorities().stream()
+                        .map(authority -> authority.getAuthority())
+                        .toList())
                 .signWith(jwtSecret)
                 .compact();
     }
@@ -29,6 +34,9 @@ public class JwtUtil {
                 .subject(userDetails.getUsername())
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + refreshTokenExpirationMs))
+                .claim("authorities", userDetails.getAuthorities().stream()
+                        .map(authority -> authority.getAuthority())
+                        .toList())
                 .signWith(jwtSecret)
                 .compact();
     }
@@ -59,5 +67,19 @@ public class JwtUtil {
                 .getPayload()
                 .getExpiration()
                 .before(new Date());
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<String> getAuthoritiesFromToken(String token) {
+        try {
+            return (List<String>) Jwts.parser()
+                    .verifyWith((SecretKey) jwtSecret)
+                    .build()
+                    .parseSignedClaims(token)
+                    .getPayload()
+                    .get("authorities");
+        } catch (Exception e) {
+            return Collections.emptyList();
+        }
     }
 }
