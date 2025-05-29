@@ -1,0 +1,103 @@
+@startuml System Architecture Diagram
+
+!define ICONURL https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master
+!include ICONURL/common.puml
+!include ICONURL/devicons/nginx.puml
+!include ICONURL/devicons/java.puml
+!include ICONURL/devicons/postgresql.puml
+!include ICONURL/font-awesome-5/server.puml
+!include ICONURL/font-awesome-5/envelope.puml
+!include ICONURL/font-awesome-5/lock.puml
+!include ICONURL/font-awesome-5/desktop.puml
+!include ICONURL/font-awesome-5/database.puml
+!include ICONURL/font-awesome-5/cogs.puml
+!include ICONURL/font-awesome-5/user.puml
+!include ICONURL/font-awesome-5/key.puml
+!include ICONURL/font-awesome-5/tachometer_alt.puml
+
+skinparam backgroundColor white
+skinparam componentStyle uml2
+
+rectangle "Client Tier" {
+  DEV_DESKTOP(client, "Client/Browser", "Web browser or API client")
+}
+
+rectangle "Load Balancing Tier" {
+  DEV_NGINX(nginx, "Nginx Load Balancer", "Distributes traffic")
+}
+
+rectangle "Application Tier" {
+  together {
+    rectangle "Spring Boot Instance 1" {
+      DEV_JAVA(app1, "Spring Boot App", "Application instance 1")
+
+      rectangle "Components" {
+        FA5_LOCK(security, "Spring Security", "JWT Authentication")
+
+        rectangle "Controllers" {
+          FA5_USER(userController, "UserController", "User management")
+          FA5_KEY(tokenController, "TokenController", "Token operations")
+          FA5_TACHOMETER_ALT(meterController, "MeterController", "Meter management")
+        }
+
+        rectangle "Services" {
+          FA5_COGS(userService, "UserService", "User business logic")
+          FA5_COGS(tokenService, "TokenService", "Token business logic")
+          FA5_COGS(meterService, "MeterService", "Meter business logic")
+          FA5_COGS(notificationService, "NotificationService", "Notification logic")
+        }
+
+        rectangle "Repositories" {
+          FA5_DATABASE(userRepo, "UserRepository", "User data access")
+          FA5_DATABASE(tokenRepo, "TokenRepository", "Token data access")
+          FA5_DATABASE(meterRepo, "MeterRepository", "Meter data access")
+          FA5_DATABASE(notificationRepo, "NotificationRepository", "Notification data access")
+        }
+      }
+    }
+
+    rectangle "Spring Boot Instance 2" {
+      DEV_JAVA(app2, "Spring Boot App", "Application instance 2")
+
+      rectangle "Components 2" {
+        FA5_LOCK(security2, "Spring Security", "JWT Authentication")
+
+        rectangle "Controllers 2" {
+          FA5_USER(userController2, "UserController", "User management")
+          FA5_KEY(tokenController2, "TokenController", "Token operations")
+          FA5_TACHOMETER_ALT(meterController2, "MeterController", "Meter management")
+        }
+
+        rectangle "Services 2" {
+          FA5_COGS(userService2, "UserService", "User business logic")
+          FA5_COGS(tokenService2, "TokenService", "Token business logic")
+          FA5_COGS(meterService2, "MeterService", "Meter business logic")
+          FA5_COGS(notificationService2, "NotificationService", "Notification logic")
+        }
+
+        rectangle "Repositories 2" {
+          FA5_DATABASE(userRepo2, "UserRepository", "User data access")
+          FA5_DATABASE(tokenRepo2, "TokenRepository", "Token data access")
+          FA5_DATABASE(meterRepo2, "MeterRepository", "Meter data access")
+          FA5_DATABASE(notificationRepo2, "NotificationRepository", "Notification data access")
+        }
+      }
+    }
+  }
+}
+
+rectangle "Data Tier" {
+  DEV_POSTGRESQL(db, "PostgreSQL Database", "Persistent storage")
+  FA5_ENVELOPE(email, "Email Server (SMTP)", "Notification delivery")
+}
+
+client -down-> nginx : HTTP/HTTPS
+nginx -down-> app1 : HTTP
+nginx -down-> app2 : HTTP
+
+app1 -down-> db
+app1 -down-> email
+app2 -down-> db
+app2 -down-> email
+
+@enduml
