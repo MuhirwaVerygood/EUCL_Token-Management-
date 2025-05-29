@@ -1,0 +1,64 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:16-alpine
+    container_name: eucl-postgres
+    environment:
+      POSTGRES_DB: eucl_token
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Application instances
+  app1:
+    build: .
+    container_name: eucl-app1
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/eucl_token
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 1234
+      SERVER_PORT: 8090
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8091:8090"
+
+  app2:
+    build: .
+    container_name: eucl-app2
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/eucl_token
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 1234
+      SERVER_PORT: 8090
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8092:8090"
+
+  # Nginx Load Balancer
+  nginx:
+    image: nginx:alpine
+    container_name: eucl-nginx
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "80:80"
+    depends_on:
+      - app1
+      - app2
+
+volumes:
+  postgres_data:
