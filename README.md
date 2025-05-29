@@ -71,8 +71,34 @@ The API documentation is available at:
 ## System Architecture
 
 The system architecture is documented in the following diagrams:
-- [Data Flow Diagram](diagrams/data_flow_diagram.txt) - Shows how data flows through the system
-- [System Architecture Diagram](diagrams/system_architecture_diagram.txt) - Shows the components and their relationships
+- [Data Flow Diagram (Text Version)](diagrams/data_flow_diagram.txt) - Shows how data flows through the system
+- [System Architecture Diagram (Text Version)](diagrams/system_architecture_diagram.txt) - Shows the components and their relationships
+
+### Visual Diagrams with Icons
+
+Enhanced diagrams with visual icons are available in PlantUML format:
+- [Data Flow Diagram with Icons](diagrams/data_flow_diagram.puml) - Shows how data flows through the system with visual icons
+- [System Architecture Diagram with Icons](diagrams/system_architecture_diagram.puml) - Shows the components and their relationships with visual icons
+
+#### Rendered Diagrams
+
+**System Architecture Diagram:**
+
+![System Architecture Diagram](https://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/username/Eucl_token_management/main/diagrams/system_architecture_diagram.puml)
+
+**Data Flow Diagram:**
+
+![Data Flow Diagram](https://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/username/Eucl_token_management/main/diagrams/data_flow_diagram.puml)
+
+> Note: The rendered diagrams above will be visible once the repository is pushed to GitHub. If you're viewing this locally or the diagrams aren't visible, you can use one of the methods below.
+
+#### How to View PlantUML Diagrams
+
+1. **Use the included HTML viewer**: Open [diagrams/view_diagrams.html](diagrams/view_diagrams.html) in your web browser to see the diagrams rendered with icons
+2. Use an online PlantUML renderer like [PlantUML Web Server](http://www.plantuml.com/plantuml/uml/)
+3. Copy the content of the .puml file and paste it into the renderer
+4. Or use a PlantUML plugin for your IDE (available for VS Code, IntelliJ, etc.)
+5. Or install PlantUML locally (requires Java and Graphviz)
 
 ## Environment Variables
 

@@ -1,0 +1,63 @@
+@startuml Data Flow Diagram
+
+!define ICONURL https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master
+!include ICONURL/common.puml
+!include ICONURL/devicons/nginx.puml
+!include ICONURL/devicons/java.puml
+!include ICONURL/devicons/postgresql.puml
+!include ICONURL/font-awesome-5/server.puml
+!include ICONURL/font-awesome-5/envelope.puml
+!include ICONURL/font-awesome-5/lock.puml
+!include ICONURL/font-awesome-5/desktop.puml
+!include ICONURL/font-awesome-5/database.puml
+!include ICONURL/font-awesome-5/cogs.puml
+!include ICONURL/font-awesome-5/user.puml
+!include ICONURL/font-awesome-5/key.puml
+!include ICONURL/font-awesome-5/tachometer_alt.puml
+
+skinparam backgroundColor white
+skinparam componentStyle uml2
+
+' Define components with icons
+FA5_DESKTOP(client, "Client/Browser", "Web browser or API client")
+DEV_NGINX(nginx, "Nginx Load Balancer", "Distributes traffic")
+DEV_JAVA(app, "Spring Boot Application", "Application server")
+FA5_LOCK(auth, "Authentication", "JWT Authentication")
+FA5_USER(userService, "User Service", "User management")
+FA5_KEY(tokenService, "Token Service", "Token operations")
+FA5_TACHOMETER_ALT(meterService, "Meter Service", "Meter management")
+FA5_ENVELOPE(notificationService, "Notification Service", "Notification management")
+DEV_POSTGRESQL(db, "PostgreSQL Database", "Persistent storage")
+FA5_ENVELOPE(email, "Email Server (SMTP)", "Notification delivery")
+
+' Define data flows
+client -right-> nginx : HTTP Request
+nginx -right-> app : Forwarded Request
+app -down-> auth
+app -down-> userService
+app -down-> tokenService
+app -down-> meterService
+app -down-> notificationService
+app -down-> db : Data Storage/Retrieval
+app -down-> email : Send Notifications
+app -left-> nginx : HTTP Response
+nginx -left-> client : HTTP Response
+
+' Add notes for key data flows
+note bottom of userService
+  User registration and authentication
+end note
+
+note bottom of tokenService
+  Token purchase and validation
+end note
+
+note bottom of meterService
+  Meter registration and management
+end note
+
+note bottom of notificationService
+  Notifications for expiring tokens
+end note
+
+@enduml
