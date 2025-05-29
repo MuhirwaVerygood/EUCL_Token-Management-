@@ -1,0 +1,91 @@
+```
++------------------+     +------------------+     +------------------+
+|                  |     |                  |     |                  |
+|  Client/Browser  |     |  Nginx Load      |     |  Spring Boot     |
+|                  |     |  Balancer        |     |  Application     |
+|                  |     |                  |     |                  |
++--------+---------+     +--------+---------+     +--------+---------+
+         |                        |                        |
+         |                        |                        |
+         |  HTTP Request          |                        |
+         +----------------------->+                        |
+         |                        |                        |
+         |                        |  Forwarded Request     |
+         |                        +----------------------->+
+         |                        |                        |
+         |                        |                        |  +------------------+
+         |                        |                        |  |                  |
+         |                        |                        +->+  Authentication  |
+         |                        |                        |  |  (JWT)           |
+         |                        |                        |  |                  |
+         |                        |                        |  +------------------+
+         |                        |                        |
+         |                        |                        |  +------------------+
+         |                        |                        |  |                  |
+         |                        |                        +->+  User Service    |
+         |                        |                        |  |                  |
+         |                        |                        |  +--------+---------+
+         |                        |                        |           |
+         |                        |                        |           v
+         |                        |                        |  +------------------+
+         |                        |                        |  |                  |
+         |                        |                        +->+  Token Service   |
+         |                        |                        |  |                  |
+         |                        |                        |  +--------+---------+
+         |                        |                        |           |
+         |                        |                        |           v
+         |                        |                        |  +------------------+
+         |                        |                        |  |                  |
+         |                        |                        +->+  Meter Service   |
+         |                        |                        |  |                  |
+         |                        |                        |  +------------------+
+         |                        |                        |
+         |                        |                        |  +------------------+
+         |                        |                        |  |                  |
+         |                        |                        +->+  Notification    |
+         |                        |                        |  |  Service         |
+         |                        |                        |  |                  |
+         |                        |                        |  +------------------+
+         |                        |                        |
+         |                        |                        |  +------------------+
+         |                        |                        |  |                  |
+         |                        |                        +->+  PostgreSQL      |
+         |                        |                        |  |  Database        |
+         |                        |                        |  |                  |
+         |                        |                        |  +------------------+
+         |                        |                        |
+         |                        |                        |  +------------------+
+         |                        |                        |  |                  |
+         |                        |                        +->+  Email Server    |
+         |                        |                        |  |  (SMTP)          |
+         |                        |                        |  |                  |
+         |                        |                        |  +------------------+
+         |                        |                        |
+         |                        |  HTTP Response         |
+         |                        +<-----------------------+
+         |                        |                        |
+         |  HTTP Response         |                        |
+         +<-----------------------+                        |
+         |                        |                        |
+```
+
+This data flow diagram illustrates how data moves through the EUCL Token Management System:
+
+1. Client/Browser sends HTTP requests to the Nginx Load Balancer
+2. Nginx forwards the requests to one of the Spring Boot Application instances
+3. The Spring Boot Application processes the request through various components:
+   - Authentication using JWT
+   - User Service for user management
+   - Token Service for token operations
+   - Meter Service for meter management
+   - Notification Service for sending notifications
+4. The application interacts with:
+   - PostgreSQL Database for data storage and retrieval
+   - Email Server (SMTP) for sending notifications
+5. The response flows back through the application to Nginx and then to the client
+
+Key data flows:
+- User registration and authentication
+- Token purchase and validation
+- Meter registration and management
+- Notifications for expiring tokens

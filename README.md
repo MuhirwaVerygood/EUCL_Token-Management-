@@ -68,6 +68,12 @@ The application can be accessed at:
 The API documentation is available at:
 - http://localhost/swagger-ui.html
 
+## System Architecture
+
+The system architecture is documented in the following diagrams:
+- [Data Flow Diagram](diagrams/data_flow_diagram.txt) - Shows how data flows through the system
+- [System Architecture Diagram](diagrams/system_architecture_diagram.txt) - Shows the components and their relationships
+
 ## Environment Variables
 
 The following environment variables can be configured in the docker-compose.yml file:

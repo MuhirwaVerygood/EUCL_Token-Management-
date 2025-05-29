@@ -1,0 +1,120 @@
+```
++----------------------------------------------+
+|                                              |
+|              Client/Browser                  |
+|                                              |
++---------------------+------------------------+
+                      |
+                      | HTTP/HTTPS
+                      |
+                      v
++---------------------+------------------------+
+|                                              |
+|              Nginx Load Balancer             |
+|                                              |
++---------------------+------------------------+
+                      |
+                      | HTTP
+                      |
+          +-----------+-----------+
+          |                       |
+          v                       v
++------------------+    +------------------+
+|                  |    |                  |
+|  Spring Boot     |    |  Spring Boot     |
+|  Application     |    |  Application     |
+|  Instance 1      |    |  Instance 2      |
+|                  |    |                  |
++--+---------------+    +---------------+--+
+   |                                    |
+   |                                    |
+   |                                    |
+   |  +-------------------------------+ |
+   |  |                               | |
+   +->+        Spring Security        |<+
+   |  |        (JWT Auth)             | |
+   |  |                               | |
+   |  +-------------------------------+ |
+   |                                    |
+   |  +-------------------------------+ |
+   |  |                               | |
+   +->+        Controllers            |<+
+   |  |  +---------------------+      | |
+   |  |  |  UserController     |      | |
+   |  |  +---------------------+      | |
+   |  |  |  TokenController    |      | |
+   |  |  +---------------------+      | |
+   |  |  |  MeterController    |      | |
+   |  |  +---------------------+      | |
+   |  |                               | |
+   |  +-------------------------------+ |
+   |                                    |
+   |  +-------------------------------+ |
+   |  |                               | |
+   +->+        Services               |<+
+   |  |  +---------------------+      | |
+   |  |  |  UserService        |      | |
+   |  |  +---------------------+      | |
+   |  |  |  TokenService       |      | |
+   |  |  +---------------------+      | |
+   |  |  |  MeterService       |      | |
+   |  |  +---------------------+      | |
+   |  |  |  NotificationService|      | |
+   |  |  +---------------------+      | |
+   |  |                               | |
+   |  +-------------------------------+ |
+   |                                    |
+   |  +-------------------------------+ |
+   |  |                               | |
+   +->+        Repositories           |<+
+   |  |  +---------------------+      | |
+   |  |  |  UserRepository     |      | |
+   |  |  +---------------------+      | |
+   |  |  |  TokenRepository    |      | |
+   |  |  +---------------------+      | |
+   |  |  |  MeterRepository    |      | |
+   |  |  +---------------------+      | |
+   |  |  |  NotificationRepo   |      | |
+   |  |  +---------------------+      | |
+   |  |                               | |
+   |  +-------------------------------+ |
+   |                                    |
+   |                                    |
+   |                                    |
+   |                                    |
+   v                                    v
++------------------+    +------------------+
+|                  |    |                  |
+|  PostgreSQL      |    |  Email Server    |
+|  Database        |    |  (SMTP)          |
+|                  |    |                  |
++------------------+    +------------------+
+
+```
+
+This system architecture diagram illustrates the components of the EUCL Token Management System and their relationships:
+
+1. **Client Tier**:
+   - Web browsers or API clients that interact with the system
+
+2. **Load Balancing Tier**:
+   - Nginx load balancer that distributes traffic between application instances
+
+3. **Application Tier** (Multiple Instances):
+   - Spring Boot applications with the following components:
+     - Spring Security with JWT Authentication
+     - Controllers (UserController, TokenController, MeterController)
+     - Services (UserService, TokenService, MeterService, NotificationService)
+     - Repositories (UserRepository, TokenRepository, MeterRepository, NotificationRepository)
+
+4. **Data Tier**:
+   - PostgreSQL Database for persistent storage
+   - Email Server (SMTP) for sending notifications
+
+The architecture follows a typical layered approach with:
+- Presentation layer (Controllers)
+- Business logic layer (Services)
+- Data access layer (Repositories)
+- External systems integration (Database, Email)
+
+The system is designed for high availability with multiple application instances behind a load balancer, all accessing a shared database.
