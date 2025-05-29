@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EUCL Token Management System - Diagrams</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .diagram-container {
+            margin-bottom: 40px;
+        }
+        .diagram-frame {
+            width: 100%;
+            height: 600px;
+            border: 1px solid #ddd;
+            margin-top: 10px;
+        }
+        .code-container {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+            overflow: auto;
+        }
+        pre {
+            margin: 0;
+            white-space: pre-wrap;
+        }
+        .note {
+            background-color: #e7f3fe;
+            border-left: 6px solid #2196F3;
+            padding: 10px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>EUCL Token Management System - Diagrams</h1>
+        
+        <div class="note">
+            <p><strong>Note:</strong> This page allows you to view the PlantUML diagrams with icons directly in your browser. 
+            It uses the PlantUML web server to render the diagrams from the PlantUML code in this repository.</p>
+        </div>
+        
+        <div class="diagram-container">
+            <h2>System Architecture Diagram</h2>
+            <p>This diagram shows the components of the EUCL Token Management System and their relationships.</p>
+            <iframe class="diagram-frame" src="https://www.plantuml.com/plantuml/svg/SoWkIImgAStDuNBAJrBGjLDmpCbCJbMmKiX8pSd9vt98pKi1IW80"></iframe>
+            
+            <div class="code-container">
+                <h3>PlantUML Code:</h3>
+                <pre id="system-architecture-code">Loading...</pre>
+            </div>
+        </div>
+        
+        <div class="diagram-container">
+            <h2>Data Flow Diagram</h2>
+            <p>This diagram shows how data flows through the EUCL Token Management System.</p>
+            <iframe class="diagram-frame" src="https://www.plantuml.com/plantuml/svg/SoWkIImgAStDuNBAJrBGjLDmpCbCJbMmKiX8pSd9vt98pKi1IW80"></iframe>
+            
+            <div class="code-container">
+                <h3>PlantUML Code:</h3>
+                <pre id="data-flow-code">Loading...</pre>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Function to fetch and display PlantUML code
+        async function fetchDiagramCode() {
+            try {
+                // Fetch system architecture diagram code
+                const sysArchResponse = await fetch('system_architecture_diagram.puml');
+                const sysArchCode = await sysArchResponse.text();
+                document.getElementById('system-architecture-code').textContent = sysArchCode;
+                
+                // Update system architecture iframe with encoded PlantUML
+                const sysArchIframe = document.querySelector('.diagram-container:nth-child(3) iframe');
+                sysArchIframe.src = `https://www.plantuml.com/plantuml/svg/~h${encodeURIComponent(sysArchCode)}`;
+                
+                // Fetch data flow diagram code
+                const dataFlowResponse = await fetch('data_flow_diagram.puml');
+                const dataFlowCode = await dataFlowResponse.text();
+                document.getElementById('data-flow-code').textContent = dataFlowCode;
+                
+                // Update data flow iframe with encoded PlantUML
+                const dataFlowIframe = document.querySelector('.diagram-container:nth-child(4) iframe');
+                dataFlowIframe.src = `https://www.plantuml.com/plantuml/svg/~h${encodeURIComponent(dataFlowCode)}`;
+            } catch (error) {
+                console.error('Error fetching diagram code:', error);
+            }
+        }
+        
+        // Load diagram code when page loads
+        window.addEventListener('DOMContentLoaded', fetchDiagramCode);
+    </script>
+</body>
+</html>
