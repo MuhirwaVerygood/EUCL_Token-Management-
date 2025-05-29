@@ -1,9 +1,7 @@
-version: '3.8'
-
 services:
   # PostgreSQL Database
   postgres:
-    image: postgres:16-alpine
+    image: postgres
     container_name: eucl-postgres
     environment:
       POSTGRES_DB: eucl_token
@@ -21,32 +19,58 @@ services:
 
   # Application instances
   app1:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
+      tags:
+        - "eucl-app1-image:latest"
     container_name: eucl-app1
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/eucl_token
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: 1234
       SERVER_PORT: 8090
+      SPRING_JPA_HIBERNATE_DDL-AUTO: update
+      MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: health,info
+      MANAGEMENT_ENDPOINT_HEALTH_SHOW-DETAILS: always
     depends_on:
       postgres:
         condition: service_healthy
     ports:
       - "8091:8090"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8090/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
   app2:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
+      tags:
+        - "eucl-app2-image:latest"
     container_name: eucl-app2
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/eucl_token
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: 1234
       SERVER_PORT: 8090
+      SPRING_JPA_HIBERNATE_DDL-AUTO: update
+      MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: health,info
+      MANAGEMENT_ENDPOINT_HEALTH_SHOW-DETAILS: always
     depends_on:
       postgres:
         condition: service_healthy
     ports:
       - "8092:8090"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8090/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
   # Nginx Load Balancer
   nginx:
@@ -57,8 +81,10 @@ services:
     ports:
       - "80:80"
     depends_on:
-      - app1
-      - app2
+      app1:
+        condition: service_healthy
+      app2:
+        condition: service_healthy
 
 volumes:
   postgres_data:
