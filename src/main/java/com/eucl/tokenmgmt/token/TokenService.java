@@ -19,8 +19,8 @@ public class TokenService {
     private final MeterRepository meterRepository;
 
     public ResponseEntity<?> purchaseToken(String meterNumber, int amount) {
-        if (!meterNumber.matches("^[0-9A-Za-z]{6}$")) {
-            return new ResponseEntity<>("Invalid meter number format", HttpStatus.BAD_REQUEST);
+        if (!meterNumber.matches("^\\d{6}$")) {
+            return new ResponseEntity<>("Invalid meter number format. Meter number must be exactly 6 digits", HttpStatus.BAD_REQUEST);
         }
         if (amount < 100 || amount % 100 != 0) {
             return new ResponseEntity<>("Amount must be a multiple of 100 RWF", HttpStatus.BAD_REQUEST);
@@ -59,8 +59,8 @@ public class TokenService {
     }
 
     public ResponseEntity<?> getTokensByMeterNumber(String meterNumber) {
-        if (!meterNumber.matches("^[0-9A-Za-z]{6}$")) {
-            return new ResponseEntity<>("Invalid meter number format", HttpStatus.BAD_REQUEST);
+        if (!meterNumber.matches("^\\d{6}$")) {
+            return new ResponseEntity<>("Invalid meter number format. Meter number must be exactly 6 digits", HttpStatus.BAD_REQUEST);
         }
         List<PurchasedToken> tokens = tokenRepository.findByMeterNumber(meterNumber);
         List<String> formattedTokens = tokens.stream()

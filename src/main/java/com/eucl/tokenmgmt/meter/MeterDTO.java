@@ -11,7 +11,7 @@ import jakarta.validation.constraints.*;
 @AllArgsConstructor
 public class MeterDTO {
     @NotBlank(message = "Meter number is mandatory")
-    @Pattern(regexp = "^[0-9A-Za-z]{6}$", message = "Meter number must be exactly 6 alphanumeric characters")
+    @Pattern(regexp = "^\\d{6}$", message = "Meter number must be exactly 6 digits")
     private String meterNumber;
 
     @NotNull(message = "User ID is mandatory")

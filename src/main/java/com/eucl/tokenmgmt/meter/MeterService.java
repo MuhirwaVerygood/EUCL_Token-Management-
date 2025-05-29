@@ -17,8 +17,8 @@ public class MeterService {
     private final UserRepository userRepository;
 
     public ResponseEntity<String> registerMeter(String meterNumber, Long userId) {
-        if (!meterNumber.matches("^[0-9A-Za-z]{6}$")) {
-            return new ResponseEntity<>("Meter number must be 6 alphanumeric characters", HttpStatus.BAD_REQUEST);
+        if (!meterNumber.matches("^\\d{6}$")) {
+            return new ResponseEntity<>("Meter number must be exactly 6 digits", HttpStatus.BAD_REQUEST);
         }
         if (meterRepository.findByMeterNumber(meterNumber).isPresent()) {
             return new ResponseEntity<>("Meter number already exists", HttpStatus.CONFLICT);
